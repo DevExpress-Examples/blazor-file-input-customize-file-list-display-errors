@@ -1,0 +1,13 @@
+﻿<svg class="dxbl-image dxbl-btn-icon" aria-hidden="true" focusable="false">
+    <use class="dxbl-icon-set-default" href="_content/DevExpress.Blazor/dx-blazor.svg?v=@(version)#dx-@(Type)"></use>
+    <use class="dxbl-icon-set-fluent" href="_content/DevExpress.Blazor/dx-blazor.svg?v=@(version)#dx-@(Type)-fluent"></use>
+    <use class="dxbl-icon-set-fluent-small" href="_content/DevExpress.Blazor/dx-blazor.svg?v=@(version)#dx-@(Type)-fluent-16"></use>
+    <use class="dxbl-icon-set-fluent-large" href="_content/DevExpress.Blazor/dx-blazor.svg?v=@(version)#dx-@(Type)-fluent-24"></use>
+</svg>
+
+@code {
+    [Parameter]
+    public required string Type { get; set; }
+
+    private static string version = typeof(DxGrid).Assembly.GetName().Version.ToString();
+}
