@@ -1,61 +1,59 @@
-﻿<div class="dxbl-upload-container custom-upload-container">
-    <div class="dxbl-upload-file-list-view" aria-live="polite">
+﻿<div class="custom-upload-container">
+    <div class="custom-upload-file-list-view" aria-live="polite">
         @foreach (var entry in Entries)
         {
             var state = entry.State();
 
-            <div class="dxbl-upload-file-view">
+            <div class="custom-upload-file-view">
                 <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                           RenderStyleMode="ButtonRenderStyleMode.Text"
-                          CssClass="dxbl-upload-file-btn"
+                          CssClass="custom-upload-file-btn"
                           role="presentation">
-                    <DxIcon Type="uc-file" />
+                    <CustomIcon Type="uc-file" Fluent="true" />
                 </DxButton>
 
-                <div class="dxbl-upload-file-view-details">
-                    <div class="dxbl-upload-file-view-info">
-                        <span class="dxbl-upload-file-view-text">@entry.Name</span>
-                        <span class="dxbl-upload-file-view-size">@FormatBytes(entry.Size)</span>
-                        <span class="dxbl-upload-file-view-size">@entry.Guid</span>
-                        <span class="dxbl-upload-file-view-size">@entry.SelectedFile?.Guid</span>
+                <div class="custom-upload-file-view-details">
+                    <div class="custom-upload-file-view-info">
+                        <span class="custom-upload-file-view-text">@entry.Name</span>
+                        <span class="custom-upload-file-view-size">@FormatBytes(entry.Size)</span>
                     </div>
 
                     @switch (state)
                     {
                         case UploadState.NotStarted:
-                            <span class="dxbl-upload-file-view-load-state">Ready to upload</span>
+                            <span class="custom-upload-file-view-load-state">Ready to upload</span>
                             break;
 
                         case UploadState.InProgress:
-                            <DxProgressBar Value="entry.BytesRead" MaxValue="entry.Size" ShowLabel="false" Size="100%" CssClass="dxbl-upload-file-view-progress-bar" />
+                            <DxProgressBar Value="entry.BytesRead" MaxValue="entry.Size" ShowLabel="false" Size="100%" />
                             break;
 
                         case UploadState.Error:
-                            <span class="dxbl-upload-file-view-load-state dxbl-upload-file-view-invalid-load-state">@(entry.ErrorMessage ?? "Error")</span>
+                            <span class="custom-upload-file-view-load-state custom-upload-file-view-invalid-load-state">@(entry.ErrorMessage ?? "Error")</span>
                             break;
 
                         case UploadState.Success:
-                            <span class="dxbl-upload-file-view-load-state dxbl-upload-file-view-success-load-state">Uploaded</span>
+                            <span class="custom-upload-file-view-load-state custom-upload-file-view-success-load-state">Uploaded</span>
                             break;
                     }
                 </div>
-                <div class="dxbl-upload-file-view-icon-container">
+                <div class="custom-upload-file-view-icon-container">
                     @switch (state)
                     {
                         case UploadState.NotStarted:
                             <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                                       RenderStyleMode="ButtonRenderStyleMode.Text"
-                                      CssClass="dxbl-upload-upload-btn"
+                                      CssClass="custom-upload-upload-btn"
                                       Click="() => UploadFile(entry)">
-                                <DxIcon Type="uc-upload" />
+                                <CustomIcon Type="uc-upload" Fluent="true" />
                             </DxButton>
                             break;
                         case UploadState.Error:
                             <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                                       RenderStyleMode="ButtonRenderStyleMode.Text"
-                                      CssClass="dxbl-upload-reload-btn"
+                                      CssClass="custom-upload-reload-btn"
                                       Click="() => ReloadFile(entry)">
-                                <DxIcon Type="uc-reload" />
+                                <CustomIcon Type="uc-reload" Fluent="true" />
                             </DxButton>
                             break;
                     }
@@ -64,17 +62,17 @@
                         case UploadState.InProgress:
                             <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                                       RenderStyleMode="ButtonRenderStyleMode.Text"
-                                      CssClass="dxbl-upload-cancel-btn"
+                                      CssClass="custom-upload-cancel-btn"
                                       Click="() => CancelFile(entry)">
-                                <DxIcon Type="cancel" />
+                                <CustomIcon Type="cancel" Fluent="true" />
                             </DxButton>
                             break;
                         default:
                             <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                                       RenderStyleMode="ButtonRenderStyleMode.Text"
-                                      CssClass="dxbl-upload-cancel-btn"
+                                      CssClass="custom-upload-cancel-btn"
                                       Click="() => RemoveFile(entry)">
-                                <DxIcon Type="cancel" />
+                                <CustomIcon Type="cancel" Fluent="true" />
                             </DxButton>
                             break;
                     }
@@ -93,10 +91,10 @@
 
     private static string FormatBytes(long bytes)
     {
-        string[] suffixes = { "B", "kB", "MB", "GB", "TB", "PB", "EB" };
+        string[] suffixes = { "b", "kb", "Mb", "Gb", "Tb", "Pb", "Eb" };
 
-        if (bytes < 0)
-            return "(0 B)";
+        if (bytes <= 0)
+            return "(0 b)";
 
         double size = bytes;
         int order = 0;

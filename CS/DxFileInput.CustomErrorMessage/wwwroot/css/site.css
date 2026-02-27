@@ -77,12 +77,3 @@ html, body {
     justify-content: center;
     width: 100%;
 }
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
-}
-
-.custom-upload-container {
-    order: 2;
-}

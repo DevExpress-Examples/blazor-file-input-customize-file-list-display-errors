@@ -1,0 +1,123 @@
+::deep.custom-upload-container {
+    order: 2;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-flow: column nowrap;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+}
+
+::deep.custom-upload-container .custom-upload-file-list-view {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding-top: var(--dxbl-upload-file-list-view-padding-top);
+}
+
+        ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .dxbl-btn {
+            padding: var(--dxbl-upload-file-btn-padding);
+            height: -webkit-fit-content;
+            height: -moz-fit-content;
+            height: fit-content;
+            cursor: pointer;
+        }
+
+    ::deep.custom-upload-container .custom-upload-file-view {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        margin-bottom: var(--dxbl-upload-file-margin-bottom);
+        height: var(--dxbl-upload-file-height);
+    }
+
+        ::deep.custom-upload-container .custom-upload-file-view .custom-upload-file-btn {
+            --dxbl-upload-file-btn-padding: var(--dxbl-upload-upload-file-btn-padding, 12px 8px 12px 10px);
+            pointer-events: none;
+        }
+
+    ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        width: 100%;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        min-width: var(--dxds-spacing-0);
+    }
+
+        ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details .custom-upload-file-view-info {
+            display: -webkit-inline-box;
+            display: -webkit-inline-flex;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
+            width: 100%;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            -webkit-box-pack: start;
+            -webkit-justify-content: flex-start;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+        }
+
+::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details .custom-upload-file-view-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: var(--dxbl-upload-file-font-weight);
+}
+
+::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details .custom-upload-file-view-size {
+    padding-left: var(--dxbl-upload-file-size-padding-left);
+    color: var(--dxbl-upload-file-size-color);
+    white-space: nowrap;
+}
+
+::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details .custom-upload-file-view-load-state {
+    font-size: var(--dxbl-upload-load-state-font-size);
+    color: var(--dxbl-upload-load-state-color);
+}
+
+::deep.custom-upload-container .custom-upload-file-view-load-state.custom-upload-file-view-success-load-state {
+    --dxbl-upload-load-state-color: var(--dxds-color-border-success-compound-rest);
+}
+
+::deep.custom-upload-container .custom-upload-file-view-load-state.custom-upload-file-view-invalid-load-state {
+    --dxbl-upload-load-state-color: var(--dxds-color-content-danger-default-rest);
+}
+
+::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-icon-container {
+    padding-left: var(--dxds-spacing-160);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    z-index: 0;
+}
