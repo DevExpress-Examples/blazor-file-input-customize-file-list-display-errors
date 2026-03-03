@@ -3,7 +3,7 @@
     -webkit-align-self: center;
     -ms-flex-item-align: center;
     align-self: center;
-    margin: var(--dxbl-upload-file-image-margin);
+    margin: var(--dxds-spacing-0);
 }
 
 svg.custom-image {

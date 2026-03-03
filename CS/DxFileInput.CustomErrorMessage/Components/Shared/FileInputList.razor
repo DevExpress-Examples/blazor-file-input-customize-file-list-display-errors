@@ -25,7 +25,7 @@
                             break;
 
                         case UploadState.InProgress:
-                            <DxProgressBar Value="entry.BytesRead" MaxValue="entry.Size" ShowLabel="false" Size="100%" />
+                            <DxProgressBar Value="entry.BytesRead" MaxValue="entry.Size" ShowLabel="false" Size="100%" CssClass="custom-progress-bar" />
                             break;
 
                         case UploadState.Error:
