@@ -46,8 +46,8 @@
         -webkit-flex-direction: row;
         -ms-flex-direction: row;
         flex-direction: row;
-        margin-bottom: var(--dxds-spacing-120, 0.85rem); /* 0.75rem */
-        height: var(--dxds-spacing-400, 40px); /* 2.5rem */
+        margin-bottom: var(--dxds-spacing-120, 0.85rem);
+        height: var(--dxds-spacing-400, 40px);
     }
 
     ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details {
