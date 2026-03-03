@@ -3,17 +3,11 @@
     -webkit-align-self: center;
     -ms-flex-item-align: center;
     align-self: center;
-    margin: var(--dxds-spacing-0);
+    margin: var(--dxds-spacing-0, 0rem);
 }
 
 svg.custom-image {
     width: var(--dxds-spacing-200, 1rem);
     height: var(--dxds-spacing-200, 1rem);
-}
-
-.custom-image {
-    margin: 0 0;
-    width: auto;
-    height: auto;
     fill: currentcolor;
 }
