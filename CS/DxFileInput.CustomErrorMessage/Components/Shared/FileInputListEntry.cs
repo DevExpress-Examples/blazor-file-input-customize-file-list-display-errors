@@ -4,8 +4,8 @@ namespace DxFileInput.CustomErrorMessage.Components.Shared;
 
 public class FileInputListEntry
 {
-    public UploadFileInfo UploadInfo { get; init; }
-    public IFileInputSelectedFile SelectedFile { get; set; }
+    public required UploadFileInfo UploadInfo { get; init; }
+    public IFileInputSelectedFile? SelectedFile { get; set; }
 
     public string Name => UploadInfo.Name;
     public string Guid => UploadInfo.Guid;
