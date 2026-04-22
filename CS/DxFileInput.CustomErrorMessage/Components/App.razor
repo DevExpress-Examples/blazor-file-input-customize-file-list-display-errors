@@ -20,17 +20,10 @@
 </html>
 
 @code {
-    static readonly ITheme FluentTheme = Themes.Fluent.Clone(properties =>
+    static readonly ITheme ActiveTheme = Themes.Fluent.Clone(properties =>
     {
         properties.Mode = ThemeMode.Light;
     });
-
-    static readonly ITheme BootstrapTheme = Themes.BootstrapExternal.Clone(properties =>
-    {
-        properties.AddFilePaths(["css/bootstrap/bootstrap.min.css"]);
-    });
-
-    static readonly ITheme ActiveTheme = FluentTheme;
 
     private string AppendVersion(string path) => FileVersionProvider.AddFileVersionToPath("/", path);
 }
