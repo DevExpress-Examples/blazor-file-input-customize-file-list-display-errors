@@ -1,0 +1,134 @@
+﻿<div class="custom-upload-container">
+    <div class="custom-upload-file-list-view" aria-live="polite">
+        @foreach (var entry in Entries)
+        {
+            var state = entry.State();
+
+            <div class="custom-upload-file-view">
+                <DxButton RenderStyle="ButtonRenderStyle.Secondary"
+                          RenderStyleMode="ButtonRenderStyleMode.Text"
+                          CssClass="custom-upload-file-btn"
+                          role="presentation">
+                    <CustomIcon Type="uc-file" Fluent="true" />
+                </DxButton>
+
+                <div class="custom-upload-file-view-details">
+                    <div class="custom-upload-file-view-info">
+                        <span class="custom-upload-file-view-text">@entry.Name</span>
+                        <span class="custom-upload-file-view-size">@FormatBytes(entry.Size)</span>
+                    </div>
+
+                    @switch (state)
+                    {
+                        case UploadState.NotStarted:
+                            <span class="custom-upload-file-view-load-state">Ready to upload</span>
+                            break;
+
+                        case UploadState.InProgress:
+                            <DxProgressBar Value="entry.BytesRead" MaxValue="entry.Size" ShowLabel="false" Size="100%" CssClass="custom-progress-bar" />
+                            break;
+
+                        case UploadState.Error:
+                            <span class="custom-upload-file-view-load-state custom-upload-file-view-invalid-load-state">@(entry.ErrorMessage ?? "Error")</span>
+                            break;
+
+                        case UploadState.Success:
+                            <span class="custom-upload-file-view-load-state custom-upload-file-view-success-load-state">Uploaded</span>
+                            break;
+                    }
+                </div>
+                <div class="custom-upload-file-view-icon-container">
+                    @switch (state)
+                    {
+                        case UploadState.NotStarted:
+                            <DxButton RenderStyle="ButtonRenderStyle.Secondary"
+                                      RenderStyleMode="ButtonRenderStyleMode.Text"
+                                      CssClass="custom-upload-upload-btn"
+                                      Click="() => UploadFile(entry)">
+                                <CustomIcon Type="uc-upload" Fluent="true" />
+                            </DxButton>
+                            break;
+                        case UploadState.Error:
+                            <DxButton RenderStyle="ButtonRenderStyle.Secondary"
+                                      RenderStyleMode="ButtonRenderStyleMode.Text"
+                                      CssClass="custom-upload-reload-btn"
+                                      Click="() => ReloadFile(entry)">
+                                <CustomIcon Type="uc-reload" Fluent="true" />
+                            </DxButton>
+                            break;
+                    }
+                    @switch (state)
+                    {
+                        case UploadState.InProgress:
+                            <DxButton RenderStyle="ButtonRenderStyle.Secondary"
+                                      RenderStyleMode="ButtonRenderStyleMode.Text"
+                                      CssClass="custom-upload-cancel-btn"
+                                      Click="() => CancelFile(entry)">
+                                <CustomIcon Type="cancel" Fluent="true" />
+                            </DxButton>
+                            break;
+                        default:
+                            <DxButton RenderStyle="ButtonRenderStyle.Secondary"
+                                      RenderStyleMode="ButtonRenderStyleMode.Text"
+                                      CssClass="custom-upload-cancel-btn"
+                                      Click="() => RemoveFile(entry)">
+                                <CustomIcon Type="cancel" Fluent="true" />
+                            </DxButton>
+                            break;
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<FileInputListEntry> Entries { get; set; } = Enumerable.Empty<FileInputListEntry>();
+
+    [CascadingParameter]
+    public required DxFileInput FileInput { get; set; }
+
+    private static string FormatBytes(long bytes)
+    {
+        string[] suffixes = { "b", "kb", "Mb", "Gb", "Tb", "Pb", "Eb" };
+
+        if (bytes <= 0)
+            return "(0 b)";
+
+        double size = bytes;
+        int order = 0;
+
+        while (size >= 1024 && order < suffixes.Length - 1)
+        {
+            size /= 1024;
+            order++;
+        }
+
+        long truncated = (long)size;
+
+        return $"({truncated} {suffixes[order]})";
+    }
+
+    private void UploadFile(FileInputListEntry entry)
+    {
+        FileInput.UploadFile(entry.UploadInfo);
+    }
+
+    private void ReloadFile(FileInputListEntry entry)
+    {
+        entry.ErrorMessage = null;
+        FileInput.ReloadFile(entry.UploadInfo);
+    }
+
+    private void CancelFile(FileInputListEntry entry)
+    {
+        FileInput.CancelFileUpload(entry.UploadInfo);
+    }
+
+    private void RemoveFile(FileInputListEntry entry)
+    {
+        FileInput.CancelFileUpload(entry.UploadInfo);
+        FileInput.RemoveFile(entry.UploadInfo);
+    }
+}

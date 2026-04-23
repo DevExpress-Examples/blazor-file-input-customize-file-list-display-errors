@@ -1,0 +1,80 @@
+::deep.custom-upload-container {
+    order: 2;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+    ::deep.custom-upload-container .custom-upload-file-list-view {
+        display: flex;
+        flex-direction: column;
+        padding-top: calc(var(--dxds-spacing-200, 1.25rem) + var(--dxds-spacing-20, 0.125rem));
+    }
+
+        ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view button {
+            padding: var(--dxds-spacing-120, 12px) var(--dxds-spacing-80, 8px) var(--dxds-spacing-120, 12px) var(--dxds-spacing-100, 10px);
+            height: fit-content;
+            cursor: pointer;
+        }
+
+        ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-btn {
+            pointer-events: none;
+        }
+
+    ::deep.custom-upload-container .custom-upload-file-view {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: var(--dxds-spacing-120, 0.85rem);
+        height: var(--dxds-spacing-400, 40px);
+    }
+
+    ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: var(--dxds-spacing-0);
+    }
+
+        ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details .custom-upload-file-view-info {
+            display: inline-flex;
+            width: 100%;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details .custom-upload-file-view-text {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-weight: var(--dxds-font-weight-caption-default, 400);
+        }
+
+        ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details .custom-upload-file-view-size {
+            padding-left: var(--dxds-spacing-120, 0.75em);
+            color: var(--dxds-color-content-neutral-subdued-rest, #adb5bd);
+            white-space: nowrap;
+        }
+
+        ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-details .custom-upload-file-view-load-state {
+            font-size: var(--dxds-font-size-base-xs, 0.75rem);
+            color: var(--upload-load-state-color);
+        }
+
+    ::deep.custom-upload-container .custom-upload-file-view-load-state {
+        --upload-load-state-color: var(--dxds-color-content-neutral-subdued-rest, #6c757d);
+    }
+
+        ::deep.custom-upload-container .custom-upload-file-view-load-state.custom-upload-file-view-success-load-state {
+            --upload-load-state-color: var(--dxds-color-border-success-compound-rest, #107c10);
+        }
+
+        ::deep.custom-upload-container .custom-upload-file-view-load-state.custom-upload-file-view-invalid-load-state {
+            --upload-load-state-color: var(--dxds-color-content-danger-default-rest, #c50f1f);
+        }
+
+    ::deep.custom-upload-container .custom-upload-file-list-view .custom-upload-file-view .custom-upload-file-view-icon-container {
+        padding-left: var(--dxds-spacing-160);
+        display: flex;
+        position: relative;
+        z-index: 0;
+    }

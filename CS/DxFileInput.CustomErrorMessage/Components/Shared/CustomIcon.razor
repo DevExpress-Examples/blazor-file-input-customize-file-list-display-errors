@@ -1,0 +1,15 @@
+﻿<svg class="custom-image" aria-hidden="true" focusable="false">
+    <use href="@href"></use>
+</svg>
+
+@code {
+    [Parameter]
+    public required string Type { get; set; }
+
+    [Parameter]
+    public bool Fluent { get; set; }
+
+    private string href => $"_content/DevExpress.Blazor/dx-blazor.svg?v={version}#dx-{Type}{(Fluent ? "-fluent" : "")}";
+
+    private static string version = typeof(DxGrid).Assembly.GetName().Version.ToString();
+}

@@ -1,0 +1,108 @@
+﻿@page "/"
+@using System.Diagnostics
+@rendermode InteractiveServer
+
+<DxButton Click="() => SimulateError = !SimulateError">
+    Simulate Error: @SimulateError
+</DxButton>
+
+<DxFileInput @ref="FileInput"
+             AllowMultiFileUpload="true"
+             UploadMode="UploadMode.OnButtonClick"
+             ShowFileList="false"
+             SelectedFilesChanged="OnSelectedFilesChanged"
+             FilesUploading="OnFilesUploading"
+             SelectButtonText="Choose files"
+             CssClass="flex-column"
+             MaxFileSize="1_000_000_000">
+    <CascadingValue Value="FileInput" Name="FileInput">
+        <FileInputList Entries="entries" />
+    </CascadingValue>
+</DxFileInput>
+
+@code {
+    private DxFileInput FileInput;
+
+    private bool SimulateError;
+
+    private List<FileInputListEntry> entries = new();
+
+    async Task OnFilesUploading(FilesUploadingEventArgs args)
+    {
+        foreach (var file in args.Files)
+        {
+            var entry = entries.First(e => e.UploadInfo.Guid == file.Guid);
+            entry.SelectedFile = file;
+            entry.ErrorMessage = null;
+            _ = ProcessFile(entry);
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    void OnSelectedFilesChanged(IEnumerable<UploadFileInfo> files)
+    {
+        var newList = new List<FileInputListEntry>();
+
+        foreach (var file in files)
+        {
+            var existing = entries.FirstOrDefault(e => e.UploadInfo.Guid == file.Guid);
+
+            if (existing is null)
+            {
+                existing = new FileInputListEntry
+                {
+                    UploadInfo = file
+                };
+            }
+
+            newList.Add(existing);
+        }
+
+        entries = newList;
+        StateHasChanged();
+    }
+
+    async Task ProcessFile(FileInputListEntry entry)
+    {
+        var file = entry.SelectedFile;
+
+        await using var stream = file.OpenReadStream(file.Size, file.CancellationTokenSource.Token);
+
+        try
+        {
+            var buffer = new byte[(int)file.Size];
+            int totalRead = 0;
+            int bytesRead;
+
+            ThrowIfSimulatedError();
+            while ((bytesRead = await stream.ReadAsync(buffer, totalRead, (int)file.Size - totalRead, file.CancellationTokenSource.Token)) > 0)
+            {
+                totalRead += bytesRead;
+                entry.BytesRead = totalRead;
+                await InvokeAsync(StateHasChanged);
+                file.CancellationTokenSource.Token.ThrowIfCancellationRequested();
+                ThrowIfSimulatedError();
+            }
+
+            entry.Data = buffer;
+        }
+        catch (OperationCanceledException)
+        {
+            entry.ErrorMessage = "Canceled";
+        }
+        catch (Exception ex)
+        {
+            FileInput.CancelFileUpload(entry.UploadInfo);
+            entry.ErrorMessage = ex.Message;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void ThrowIfSimulatedError()
+    {
+        if (SimulateError)
+            throw new Exception("Error: Custom Error Message");
+    }
+}
