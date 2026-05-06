@@ -45,6 +45,7 @@ The `FileInputListEntry` class tracks the state and error message for each file:
 public class FileInputListEntry {
     public required UploadFileInfo UploadInfo { get; init; }
     public IFileInputSelectedFile? SelectedFile { get; set; }
+    public int Size => (int)UploadInfo.Size;
     public int BytesRead { get; set; }
     public string? ErrorMessage { get; set; }
     public byte[]? Data { get; set; }
