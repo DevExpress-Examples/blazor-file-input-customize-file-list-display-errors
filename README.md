@@ -7,25 +7,22 @@
 
 # Blazor File Input - Display Custom Error Messages
 
-This example demonstrates how to use the [DxFileInput](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput) component to display custom error messages in a custom file list UI.
+The [DxFileInput](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput) component includes a built-in file list, but you can replace it with a fully custom UI to display error messages that reflect your specific business logic. This example shows how to disable the built-in file list, render a custom one with per-file state indicators (ready, uploading, success, or error), and surface custom error messages when processing fails.
 
-The key techniques shown in this example:
-- Disable the built-in file list ([ShowFileList](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ShowFileList)) and replace it with a custom file list component placed inside the `DxFileInput` content area.
-- Handle the [FilesUploading](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.FilesUploading) event to process files asynchronously and catch exceptions as custom error messages.
-- Call [CancelFileUpload](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.CancelFileUpload(DevExpress.Blazor.UploadFileInfo)) when an error occurs to mark the upload as failed.
-- Show state-specific UI for each file: a progress bar during upload, a success indicator when done, and a custom error message with a reload button on failure.
-- Use [ReloadFile](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ReloadFile(DevExpress.Blazor.UploadFileInfo)) to retry a failed upload.
+Click **Simulate Error** to trigger an error during file upload and see how the custom error message appears next to the affected file.
 
 ![Blazor DxFileInput - Custom Error Messages](images/blazor-dxfileinput-custom-error-message.png)
 
 ## Implementation Details
 
-### Custom File List
+### 1. Replace the Built-In File List
 
-Set [ShowFileList](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ShowFileList) to `false` to hide the built-in file list and place a custom `FileInputList` component as child content of `DxFileInput`:
+Set [ShowFileList](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ShowFileList) to `false` to hide the default file list. Place a custom `FileInputList` component as the child content of `DxFileInput` and pass the parent component reference via a cascading parameter so the child can call upload control methods:
 
 ```razor
-<DxFileInput ShowFileList="false"
+<DxFileInput @ref="FileInput"
+             ShowFileList="false"
+             UploadMode="UploadMode.OnButtonClick"
              SelectedFilesChanged="OnSelectedFilesChanged"
              FilesUploading="OnFilesUploading"
              ...>
@@ -35,11 +32,9 @@ Set [ShowFileList](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileIn
 </DxFileInput>
 ```
 
-The `FileInputList` component receives the file entries and renders state-specific UI for each file. It accesses the parent `DxFileInput` via a cascading parameter to call upload control methods (cancel, reload, remove).
+### 2. Track File State
 
-### Custom Error Messages
-
-The `FileInputListEntry` class tracks the state and error message for each file:
+Create a `FileInputListEntry` class to track each file's upload state and error message. Derive the state from the available data — if `SelectedFile` is null the upload has not started; if `ErrorMessage` is set the upload failed; if `BytesRead` equals `Size` the upload succeeded:
 
 ```csharp
 public class FileInputListEntry {
@@ -59,12 +54,26 @@ public class FileInputListEntry {
 }
 ```
 
-In the `FilesUploading` event handler, files are processed asynchronously. Exceptions (including cancellations) are caught and stored as a custom `ErrorMessage`. When a non-cancellation error is detected, `CancelFileUpload` is called to notify the component:
+Handle the [SelectedFilesChanged](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.SelectedFilesChanged) event to keep the entry list in sync as the user adds or removes files.
+
+### 3. Catch Errors During Upload
+
+Handle the [FilesUploading](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.FilesUploading) event to process each file asynchronously. Wrap file processing in a `try/catch` block. On failure, call [CancelFileUpload](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.CancelFileUpload(DevExpress.Blazor.UploadFileInfo)) to mark the upload as cancelled and store the exception message in `ErrorMessage`:
 
 ```csharp
+async Task OnFilesUploading(FilesUploadingEventArgs args) {
+    foreach (var file in args.Files) {
+        var entry = entries.First(e => e.UploadInfo.Guid == file.Guid);
+        entry.SelectedFile = file;
+        entry.ErrorMessage = null;
+        _ = ProcessFile(entry);
+    }
+    await InvokeAsync(StateHasChanged);
+}
+
 async Task ProcessFile(FileInputListEntry entry) {
     try {
-        // ... read file stream ...
+        // read file stream and update entry.BytesRead incrementally
     }
     catch (OperationCanceledException) {
         entry.ErrorMessage = "Canceled";
@@ -73,12 +82,13 @@ async Task ProcessFile(FileInputListEntry entry) {
         FileInput.CancelFileUpload(entry.UploadInfo);
         entry.ErrorMessage = ex.Message;
     }
+    await InvokeAsync(StateHasChanged);
 }
 ```
 
-### State-Specific UI
+### 4. Render State-Specific UI
 
-The `FileInputList` component renders different UI based on each file's upload state:
+In the `FileInputList` component, switch on `entry.State()` to display the correct UI for each file. Use a [DxProgressBar](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxProgressBar) while uploading and show the custom error message when the upload fails:
 
 ```razor
 @switch (state) {
@@ -86,7 +96,7 @@ The `FileInputList` component renders different UI based on each file's upload s
         <span>Ready to upload</span>
         break;
     case UploadState.InProgress:
-        <DxProgressBar Value="entry.BytesRead" MaxValue="entry.Size" ... />
+        <DxProgressBar Value="entry.BytesRead" MaxValue="entry.Size" ShowLabel="false" />
         break;
     case UploadState.Error:
         <span class="custom-upload-file-view-invalid-load-state">@(entry.ErrorMessage ?? "Error")</span>
@@ -97,7 +107,22 @@ The `FileInputList` component renders different UI based on each file's upload s
 }
 ```
 
-When a file is in the `Error` state, a reload button calls [ReloadFile](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ReloadFile(DevExpress.Blazor.UploadFileInfo)) to retry the upload.
+When a file is in the `Error` state, show a reload button that calls [ReloadFile](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ReloadFile(DevExpress.Blazor.UploadFileInfo)) to clear the error and retry the upload:
+
+```razor
+case UploadState.Error:
+    <DxButton Click="() => ReloadFile(entry)">
+        <CustomIcon Type="uc-reload" />
+    </DxButton>
+    break;
+```
+
+```csharp
+private void ReloadFile(FileInputListEntry entry) {
+    entry.ErrorMessage = null;
+    FileInput.ReloadFile(entry.UploadInfo);
+}
+```
 
 ## Files to Review
 
