@@ -12,7 +12,7 @@ This example customizes the [DevExpress Blazor File Input](https://docs.devexpre
 * Implements a custom file list UI to replace the built-in file list.
 * Processes files in a custom way: displays upload state, buttons depending on state, and upload errors with custom messages.
 
-![Custom file list](custom-file-list.gif)
+![Custom file list](file-input-list.gif)
 
 ## Main Page Structure
 
