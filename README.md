@@ -5,7 +5,7 @@
 [![](https://img.shields.io/badge/💬_Leave_Feedback-feecdd?style=flat-square)](#does-this-example-address-your-development-requirementsobjectives)
 <!-- default badges end -->
 
-# Blazor File Input - Customize File List and Display Custom Error Messages
+# Blazor File Input — Customize File List and Display Custom Error Messages
 
 This example customizes the [DevExpress Blazor File Input](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput) component as follows:
 
