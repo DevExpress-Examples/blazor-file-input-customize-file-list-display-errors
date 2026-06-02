@@ -14,7 +14,7 @@ This example customizes the [DevExpress Blazor File Input](https://docs.devexpre
 
 ![Custom file list](file-input-list.gif)
 
-## Main Page Structure
+## Configure a File Input Component
 
 See [Index.razor](./CS/DxFileInput.CustomErrorMessage/Components/Pages/Index.razor).
 
@@ -44,13 +44,50 @@ See [Index.razor](./CS/DxFileInput.CustomErrorMessage/Components/Pages/Index.raz
 </DxFileInput>
 ```
 
-## Custom File List Component
+## Create a Custom File List Component
 
 See [FileInputList.razor](./CS/DxFileInput.CustomErrorMessage/Components/Shared/FileInputList.razor).
 
 The **FileInputList** component replaces the built-in file list. It displays file names, upload states, state-specific buttons (Upload, Reload, Cancel, Remove all), and custom exception messages.
 
+```cs
+﻿<div class="custom-upload-container">
+    <div class="custom-upload-file-list-view" aria-live="polite">
+        @foreach (var entry in Entries) {
+            // Your markup to display files in a file list
+        }
+    ﻿</div>
+﻿</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<FileInputListEntry> Entries { get; set; } = Enumerable.Empty<FileInputListEntry>();
+    // ...
+}
+```
+
 The component uses [FileInputListEntry.cs](./CS/DxFileInput.CustomErrorMessage/Components/Shared/FileInputListEntry.cs) to store information about each file, including its upload state and error message.
+
+```cspublic class FileInputListEntry {
+    public required UploadFileInfo UploadInfo { get; init; }
+    public IFileInputSelectedFile? SelectedFile { get; set; }
+
+    public string Name => UploadInfo.Name;
+    public string Guid => UploadInfo.Guid;
+    public int Size => (int)UploadInfo.Size;
+
+    public int BytesRead { get; set; }
+    public string? ErrorMessage { get; set; }
+    public byte[]? Data { get; set; }
+
+    public UploadState State() => (
+        SelectedFile is null ? UploadState.NotStarted :
+        !String.IsNullOrEmpty(ErrorMessage) ? UploadState.Error :
+        BytesRead < Size ? UploadState.InProgress :
+        UploadState.Success
+    );
+}
+```
 
 ## Documentation
 
