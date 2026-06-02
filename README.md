@@ -18,11 +18,13 @@ This example customizes the [DevExpress Blazor File Input](https://docs.devexpre
 
 See [Index.razor](./CS/DxFileInput.CustomErrorMessage/Components/Pages/Index.razor).
 
-* Adds a **Simulate Error** button that toggles simulation of a custom upload error.
-* Adds a [DxFileInput](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput) component:
-   * Sets the [ShowFileList](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ShowFileList) property to `false` to hide the built-in file list.
-   * Handles the [SelectedFileChanged](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.SelectedFileChanged) event to display the custom file list.
-   * Handles the [FilesUploading](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.FilesUploading) event. The handler calls the **ProcessFile** method to simulate file upload, catch custom exceptions, and display exception messages.
+The main application page displays two components:
+
+* A **Simulate Error** button used to toggle simulation of a custom upload error.
+* A [DxFileInput](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput) component:
+   * The [ShowFileList](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ShowFileList) property is set to `false` to hide the built-in file list.
+   * The [SelectedFileChanged](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.SelectedFileChanged) event is handled to display the custom file list.
+   * The [FilesUploading](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.FilesUploading) event is handled. The handler calls the **ProcessFile** method to simulate file upload, catch custom exceptions, and display exception messages.
 
 ```Razor
 <DxButton Click="() => SimulateError = !SimulateError">
