@@ -70,7 +70,8 @@ The **FileInputList** component replaces the built-in file list. It displays fil
 
 The component uses [FileInputListEntry.cs](./CS/DxFileInput.CustomErrorMessage/Components/Shared/FileInputListEntry.cs) to store information about each file, including its upload state and error message.
 
-```cspublic class FileInputListEntry {
+```cs
+public class FileInputListEntry {
     public required UploadFileInfo UploadInfo { get; init; }
     public IFileInputSelectedFile? SelectedFile { get; set; }
 
