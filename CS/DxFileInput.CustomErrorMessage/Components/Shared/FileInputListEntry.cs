@@ -2,8 +2,7 @@
 
 namespace DxFileInput.CustomErrorMessage.Components.Shared;
 
-public class FileInputListEntry
-{
+public class FileInputListEntry {
     public required UploadFileInfo UploadInfo { get; init; }
     public IFileInputSelectedFile? SelectedFile { get; set; }
 
@@ -23,8 +22,7 @@ public class FileInputListEntry
     );
 }
 
-public enum UploadState
-{
+public enum UploadState {
     NotStarted,
     InProgress,
     Success,
