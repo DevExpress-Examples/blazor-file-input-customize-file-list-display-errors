@@ -1,7 +1,6 @@
 ﻿<div class="custom-upload-container">
     <div class="custom-upload-file-list-view" aria-live="polite">
-        @foreach (var entry in Entries)
-        {
+        @foreach (var entry in Entries) {
             var state = entry.State();
 
             <div class="custom-upload-file-view">
@@ -18,8 +17,7 @@
                         <span class="custom-upload-file-view-size">@FormatBytes(entry.Size)</span>
                     </div>
 
-                    @switch (state)
-                    {
+                    @switch (state) {
                         case UploadState.NotStarted:
                             <span class="custom-upload-file-view-load-state">Ready to upload</span>
                             break;
@@ -38,8 +36,7 @@
                     }
                 </div>
                 <div class="custom-upload-file-view-icon-container">
-                    @switch (state)
-                    {
+                    @switch (state) {
                         case UploadState.NotStarted:
                             <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                                       RenderStyleMode="ButtonRenderStyleMode.Text"
@@ -57,8 +54,7 @@
                             </DxButton>
                             break;
                     }
-                    @switch (state)
-                    {
+                    @switch (state) {
                         case UploadState.InProgress:
                             <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                                       RenderStyleMode="ButtonRenderStyleMode.Text"
@@ -89,8 +85,7 @@
     [CascadingParameter]
     public required DxFileInput FileInput { get; set; }
 
-    private static string FormatBytes(long bytes)
-    {
+    private static string FormatBytes(long bytes) {
         string[] suffixes = { "b", "kb", "Mb", "Gb", "Tb", "Pb", "Eb" };
 
         if (bytes <= 0)
@@ -110,24 +105,20 @@
         return $"({truncated} {suffixes[order]})";
     }
 
-    private void UploadFile(FileInputListEntry entry)
-    {
+    private void UploadFile(FileInputListEntry entry) {
         FileInput.UploadFile(entry.UploadInfo);
     }
 
-    private void ReloadFile(FileInputListEntry entry)
-    {
+    private void ReloadFile(FileInputListEntry entry) {
         entry.ErrorMessage = null;
         FileInput.ReloadFile(entry.UploadInfo);
     }
 
-    private void CancelFile(FileInputListEntry entry)
-    {
+    private void CancelFile(FileInputListEntry entry) {
         FileInput.CancelFileUpload(entry.UploadInfo);
     }
 
-    private void RemoveFile(FileInputListEntry entry)
-    {
+    private void RemoveFile(FileInputListEntry entry) {
         FileInput.CancelFileUpload(entry.UploadInfo);
         FileInput.RemoveFile(entry.UploadInfo);
     }

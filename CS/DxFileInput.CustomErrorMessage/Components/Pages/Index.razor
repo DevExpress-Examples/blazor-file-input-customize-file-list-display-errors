@@ -27,10 +27,8 @@
 
     private List<FileInputListEntry> entries = new();
 
-    async Task OnFilesUploading(FilesUploadingEventArgs args)
-    {
-        foreach (var file in args.Files)
-        {
+    async Task OnFilesUploading(FilesUploadingEventArgs args) {
+        foreach (var file in args.Files) {
             var entry = entries.First(e => e.UploadInfo.Guid == file.Guid);
             entry.SelectedFile = file;
             entry.ErrorMessage = null;
@@ -40,18 +38,14 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    void OnSelectedFilesChanged(IEnumerable<UploadFileInfo> files)
-    {
+    void OnSelectedFilesChanged(IEnumerable<UploadFileInfo> files) {
         var newList = new List<FileInputListEntry>();
 
-        foreach (var file in files)
-        {
+        foreach (var file in files) {
             var existing = entries.FirstOrDefault(e => e.UploadInfo.Guid == file.Guid);
 
-            if (existing is null)
-            {
-                existing = new FileInputListEntry
-                {
+            if (existing is null) {
+                existing = new FileInputListEntry {
                     UploadInfo = file
                 };
             }
@@ -69,15 +63,13 @@
 
         await using var stream = file.OpenReadStream(file.Size, file.CancellationTokenSource.Token);
 
-        try
-        {
+        try {
             var buffer = new byte[(int)file.Size];
             int totalRead = 0;
             int bytesRead;
 
             ThrowIfSimulatedError();
-            while ((bytesRead = await stream.ReadAsync(buffer, totalRead, (int)file.Size - totalRead, file.CancellationTokenSource.Token)) > 0)
-            {
+            while ((bytesRead = await stream.ReadAsync(buffer, totalRead, (int)file.Size - totalRead, file.CancellationTokenSource.Token)) > 0) {
                 totalRead += bytesRead;
                 entry.BytesRead = totalRead;
                 await InvokeAsync(StateHasChanged);
@@ -87,12 +79,10 @@
 
             entry.Data = buffer;
         }
-        catch (OperationCanceledException)
-        {
+        catch (OperationCanceledException) {
             entry.ErrorMessage = "Canceled";
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             FileInput.CancelFileUpload(entry.UploadInfo);
             entry.ErrorMessage = ex.Message;
         }
@@ -100,8 +90,7 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private void ThrowIfSimulatedError()
-    {
+    private void ThrowIfSimulatedError() {
         if (SimulateError)
             throw new Exception("Error: Custom Error Message");
     }

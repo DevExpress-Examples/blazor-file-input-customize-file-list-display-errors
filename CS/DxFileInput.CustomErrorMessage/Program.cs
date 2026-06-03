@@ -6,16 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddDevExpressBlazor(options =>
-{
+builder.Services.AddDevExpressBlazor(options => {
     options.SizeMode = DevExpress.Blazor.SizeMode.Medium;
 });
 builder.Services.AddMvc();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
+if(!app.Environment.IsDevelopment()) {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
