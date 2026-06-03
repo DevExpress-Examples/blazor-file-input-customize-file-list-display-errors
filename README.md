@@ -23,7 +23,7 @@ The main application page displays two components:
 * A **Simulate Error** button used to toggle simulation of a custom upload error.
 * A [DxFileInput](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput) component:
    * The [ShowFileList](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.ShowFileList) property is set to `false` to hide the built-in file list.
-   * The [SelectedFileChanged](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.SelectedFileChanged) event is handled to display the custom file list.
+   * The [SelectedFileChanged](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.SelectedFileChanged) event is handled to display a custom file list.
    * The [FilesUploading](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxFileInput.FilesUploading) event is handled. The handler calls the **ProcessFile** method to simulate file upload, catch custom exceptions, and display exception messages.
 
 ```Razor
